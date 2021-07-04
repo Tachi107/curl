@@ -1,0 +1,34 @@
+option('build_curl_exe', type: 'boolean', value: false, description: 'Build curl executable')
+option('enable_curldebug', type: 'boolean', value: false, description: 'Build with TrackMemory feature enabled')
+option('enable_ares', type: 'boolean', value: false, description: 'Enable c-ares support')
+option('enable_threaded_resolver', type: 'boolean', value: true, description: 'Enable threaded DNS lookup with c-ares')
+
+option('curl_disable_altsvc', type: 'boolean', value: false, description: 'Disable alt-svc support')
+option('curl_disable_hsts', type: 'boolean', value: false, description: 'Disable HSTS support')
+option('curl_disable_cookies', type: 'boolean', value: false, description: 'Disable cookies support')
+option('curl_disable_crypto_auth', type: 'boolean', value: false, description: 'Disable cryptographic authentication')
+option('curl_disable_ntlm', type: 'boolean', value: false, description: 'Disable NTLM support')
+option('curl_disable_verbose_strings', type: 'boolean', value: false, description: 'Disable verbose strings')
+option('enable_ipv6', type: 'boolean', value: true, description: 'Enable IPv6 support')
+
+option('ssl_backend', type: 'array', choices: ['openssl', 'wolfssl', 'gnutls', 'nss', 'bearssl', 'mbedtls', 'schannel', 'sectransp'], value: ['openssl'], description: 'SSL/TLS backend(s)')
+option('curl_disable_openssl_auto_load_config', type: 'boolean', value: false, description: 'Disable automatic loading of OpenSSL configuration')
+
+# Windows options
+option('curl_target_windows_version', type: 'combo', choices: ['0x0A00', '0x0603', '0x0602', '0x0600', '0x0600', '0x0502', '0x0501'], value: '0x0501', description: 'Minimum target Windows version as hex string')
+option('enable_unicode', type: 'boolean', value: false, description: 'Use the Unicode version of the Windows API functions')
+option('curl_windows_sspi', type: 'boolean', value: true, description: 'Use Windows libraries to allow NTLM authentication without OpenSSL')
+option('use_win32_ldap', type: 'boolean', value: true, description: 'Use Windows LDAP implementation')
+option('use_openldap', type: 'boolean', value: false, description: 'Use OpenLDAP code')
+
+option('use_nghttp2', type: 'boolean', value: false, description: 'Use Nghttp2 library')
+option('http3_backend', type: 'combo', choices: ['none', 'ngtcp2', 'quiche'], value: 'none', description: 'HTTP/3 backend. You can choose between ngtcp2+nghttp3 and Quiche')
+
+option('use_libidn2', type: 'boolean', value: true, description: 'Use libidn2 for IDN support')
+option('use_win32_idn', type: 'boolean', value: false, description: 'Use WinIDN for IDN support')
+
+option('curl_brotli', type: 'boolean', value: false, description: 'Build curl with brotli support')
+option('curl_zstd', type: 'boolean', value: false, description: 'Build curl with zstd support')
+
+option('use_libssh2', type: 'boolean', value: true, description: 'Use libssh2')
+option('use_libssh', type: 'boolean', value: false, description: 'Use libssh')
