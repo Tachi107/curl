@@ -32,3 +32,7 @@ option('curl_zstd', type: 'boolean', value: false, description: 'Build curl with
 
 option('use_libssh2', type: 'boolean', value: true, description: 'Use libssh2')
 option('use_libssh', type: 'boolean', value: false, description: 'Use libssh')
+
+option('use_gssapi', type: 'boolean', value: false, description: 'Use GSSAPI Kerberos implementation')
+
+option('enable_unix_sockets', type: 'boolean', value: true, description: 'Enable Unix domain sockets support')

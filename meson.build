@@ -5,7 +5,7 @@ project(
 	default_options: [
 		'b_ndebug=if-release'
 	],
-	meson_version: '>=0.50.0' # 0.50 con has_headers in find_library
+	meson_version: '>=0.51.0' # 0.50 con has_headers in find_library, 0.51 con get_variable(type: 'variable')
 )
 
 # Credo che tutte le variabili siano esportate in CMake per configurare il file curl_config.h.cmake,
@@ -16,6 +16,9 @@ project(
 # Anzi, al posto dell'array credo che debba usare un oggetto configuration_data: https://mesonbuild.com/Configuration.html
 # Posso fare tipo conf_data.set('HAVE_THAT_WEIRD_FUNCTION', cc.have_function('weird_function'))
 # cc.has_header_symbol() per controllare se un header ha un determinato simbolo
+#
+# TODO:
+#   I nomi delle opzioni sono inconsistenti
 
 conf = configuration_data()
 cc = meson.get_compiler('c')
@@ -27,15 +30,15 @@ conf.set_quoted('OS', os)
 if os == 'windows'
 	add_project_arguments('-D_WIN32_WINNT=' + get_option('curl_target_windows_version'), language: 'c')
 	if get_option('enable_unicode')                      # -municode is only for MinGW
-		add_project_arguments('-DUNICODE', '-D_UNICODE', cc.get_supported_arguments('-municode'))
+		add_project_arguments('-DUNICODE', '-D_UNICODE', cc.get_supported_arguments('-municode'), language: 'c')
 	endif
 endif
 
 if get_option('debug')
-	add_project_arguments('-DDEBUGBUILD', '-DCURLDEBUG')
+	add_project_arguments('-DDEBUGBUILD', '-DCURLDEBUG', language: 'c')
 endif
 if get_option('enable_curldebug')
-	add_project_arguments('-DCURLDEBUG')
+	add_project_arguments('-DCURLDEBUG', language: 'c')
 endif
 
 if get_option('enable_ares')
@@ -132,7 +135,7 @@ if ssl_backends.contains('openssl')
 	conf.set('HAVE_RAND_SCREEN', cc.has_function('RAND_screen', dependencies: openssl_dep))
 	conf.set('HAVE_RAND_EGD',    cc.has_function('RAND_egd', dependencies: openssl_dep))
 	if get_option('curl_disable_openssl_auto_load_config')
-		add_project_arguments('-DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG')
+		add_project_arguments('-DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG', language: 'c')
 	endif
 endif
 
@@ -172,7 +175,7 @@ if ssl_backends.contains('schannel')
 	conf.set('USE_SCHANNEL', true)
 	conf.set('USE_WINDOWS_SSPI', true)
 	if get_option('curl_windows_sspi')
-		add_project_arguments('-DSECURITY_WIN32')
+		add_project_arguments('-DSECURITY_WIN32', language: 'c')
 	endif
 endif
 
@@ -264,6 +267,30 @@ if get_option('use_libssh')
 		conf.set('HAVE_LIBSSH_LIBSSH_H', true)
 	else
 		warning('You enabled both libssh2 and libssh support, using only libssh2')
+	endif
+endif
+
+if get_option('use_gssapi')
+	gssapi_dep = dependency('krb5-gssapi')
+	curl_deps += gssapi_dep
+	conf.set('HAVE_GSSAPI', true)
+	conf.set('HAVE_GSSAPI_GSSAPI_H',         cc.has_header('gssapi/gssapi.h'))
+	conf.set('HAVE_GSSAPI_GSSAPI_GENERIC_H', cc.has_header('gssapi/gssapi_generic.h'))
+	conf.set('HAVE_GSSAPI_GSSAPI_KRB5_H',    cc.has_header('gssapi/gssapi_krb5.h'))
+	gssapi_vendor = gssapi_dep.get_variable(pkgconfig: 'vendor')
+	if gssapi_vendor == 'Heimdal'
+		conf.set('HAVE_GSSHEIMDAL', true)
+	elif gssapi_vendor == 'MIT'
+		conf.set('HAVE_GSSMIT', true)
+		conf.set('HAVE_OLD_GSSMIT', not cc.has_header_symbol('gssapi/gssapi.h', 'GSS_C_NT_HOSTBASED_SERVICE', dependencies: gssapi_dep))
+	endif
+endif
+
+if get_option('enable_unix_sockets')
+	if os == 'windows'
+		conf.set('USE_UNIX_SOCKETS', true)
+	else
+		conf.set('USE_UNIX_SOCKETS', cc.has_member('struct sockaddr_un', 'sun_path', prefix: '#include <sys/un.h>'))
 	endif
 endif
 
