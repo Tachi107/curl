@@ -294,4 +294,108 @@ if get_option('enable_unix_sockets')
 	endif
 endif
 
+if get_option('curl_ca_bundle') == 'auto'
+	fs = import('fs')
+	foreach ca_bundle_path : ['/etc/ssl/certs/ca-certificates.crt', '/etc/pki/tls/certs/ca-bundle.crt', '/usr/share/ssl/certs/ca-bundle.crt', '/usr/local/share/certs/ca-root-nss.crt', '/etc/ssl/cert.pem']
+		if fs.exists(ca_bundle_path)
+			conf.set_quoted('CURL_CA_BUNDLE', ca_bundle_path)
+			break
+		endif
+	endforeach
+elif get_option('curl_ca_bundle') == 'none'
+	# don't set anything
+elif get_option('curl_ca_bundle') == ''
+	error('Invalid curl_ca_bundle value (empty)')
+else
+	conf.set_quoted('CURL_CA_BUNDLE', get_option('curl_ca_bundle'))
+endif
+
+ca_path_set = false
+if get_option('curl_ca_path') == 'auto' and not ssl_backends.contains('nss')
+	if import('fs').exists('/etc/ssl/certs')
+		conf.set_quoted('CURL_CA_PATH', '/etc/ssl/certs')
+		ca_path_set = true
+	endif
+elif get_option('curl_ca_path') == 'none'
+	# don't set anything
+elif get_option('curl_ca_path') == ''
+	error('Invalid curl_ca_path value (empty)')
+else
+	conf.set_quoted('CURL_CA_PATH', get_option('curl_ca_path'))
+	ca_path_set = true
+endif
+
+if ca_path_set and (not ssl_backends.contains('openssl') and not ssl_backends.contains('gnutls') and not ssl_backends.contains('mbedtls'))
+	error('CA path only supported by OpenSSL, GnuTLS or mbedTLS. Set curl_ca_path=none or enable one of those TLS backends.')
+endif
+
+conf.set('HAVE_WINDOWS_H', cc.has_header('windows.h'))
+conf.set('HAVE_WINSOCK_H', cc.has_header('winsock.h'))
+conf.set('HAVE_WINSOCK2_H', cc.has_header('winsock2.h'))
+conf.set('HAVE_WS2TCPIP_H', cc.has_header('ws2tcpip.h'))
+conf.set('HAVE_WINCRYPT_H', cc.has_header('wincrypt.h'))
+
+conf.set('HAVE_INTTYPES_H', cc.has_header('inttypes.h'))
+conf.set('HAVE_SYS_FILIO_H', cc.has_header('sys/filio.h'))
+conf.set('HAVE_SYS_IOCTL_H', cc.has_header('sys/ioctl.h'))
+conf.set('HAVE_SYS_PARAM_H', cc.has_header('sys/param.h'))
+conf.set('HAVE_SYS_POLL_H', cc.has_header('sys/poll.h'))
+conf.set('HAVE_SYS_RESOURCE_H', cc.has_header('sys/resource.h'))
+conf.set('HAVE_SYS_SELECT_H', cc.has_header('sys/select.h'))
+conf.set('HAVE_SYS_SOCKET_H', cc.has_header('sys/socket.h'))
+conf.set('HAVE_SYS_SOCKIO_H', cc.has_header('sys/sockio.h'))
+conf.set('HAVE_SYS_STAT_H', cc.has_header('sys/stat.h'))
+conf.set('HAVE_SYS_TIME_H', cc.has_header('sys/time.h'))
+conf.set('HAVE_SYS_TYPES_H', cc.has_header('sys/types.h'))
+conf.set('HAVE_SYS_UIO_H', cc.has_header('sys/uio.h'))
+conf.set('HAVE_SYS_UN_H', cc.has_header('sys/un.h'))
+conf.set('HAVE_SYS_UTIME_H', cc.has_header('sys/utime.h'))
+conf.set('HAVE_SYS_XATTR_H', cc.has_header('sys/xattr.h'))
+conf.set('HAVE_ALLOCA_H', cc.has_header('alloca.h'))
+conf.set('HAVE_ARPA_INET_H', cc.has_header('arpa/inet.h'))
+conf.set('HAVE_ARPA_TFTP_H', cc.has_header('arpa/tftp.h'))
+conf.set('HAVE_ASSERT_H', cc.has_header('assert.h'))
+conf.set('HAVE_ERRNO_H', cc.has_header('errno.h'))
+conf.set('HAVE_FCNTL_H', cc.has_header('fcntl.h'))
+conf.set('HAVE_IDN2_H', cc.has_header('idn2.h'))
+conf.set('HAVE_IFADDRS_H', cc.has_header('ifaddrs.h'))
+conf.set('HAVE_IO_H', cc.has_header('io.h'))
+conf.set('HAVE_KRB_H', cc.has_header('krb.h'))
+conf.set('HAVE_LIBGEN_H', cc.has_header('libgen.h'))
+conf.set('HAVE_LOCALE_H', cc.has_header('locale.h'))
+conf.set('HAVE_NET_IF_H', cc.has_header('net/if.h'))
+conf.set('HAVE_NETDB_H', cc.has_header('netdb.h'))
+conf.set('HAVE_NETINET_IN_H', cc.has_header('netinet/in.h'))
+conf.set('HAVE_NETINET_TCP_H', cc.has_header('netinet/tcp.h'))
+conf.set('HAVE_LINUX_TCP_H', cc.has_header('linux/tcp.h'))
+
+conf.set('HAVE_PEM_H', cc.has_header('pem.h'))
+conf.set('HAVE_POLL_H', cc.has_header('poll.h'))
+conf.set('HAVE_PWD_H', cc.has_header('pwd.h'))
+conf.set('HAVE_SETJMP_H', cc.has_header('setjmp.h'))
+conf.set('HAVE_SIGNAL_H', cc.has_header('signal.h'))
+conf.set('HAVE_SSL_H', cc.has_header('ssl.h'))
+conf.set('HAVE_STDBOOL_H', cc.has_header('stdbool.h'))
+conf.set('HAVE_STDINT_H', cc.has_header('stdint.h'))
+conf.set('HAVE_STDIO_H', cc.has_header('stdio.h'))
+conf.set('HAVE_STDLIB_H', cc.has_header('stdlib.h'))
+conf.set('HAVE_STRING_H', cc.has_header('string.h'))
+conf.set('HAVE_STRINGS_H', cc.has_header('strings.h'))
+conf.set('HAVE_STROPTS_H', cc.has_header('stropts.h'))
+conf.set('HAVE_TERMIO_H', cc.has_header('termio.h'))
+conf.set('HAVE_TERMIOS_H', cc.has_header('termios.h'))
+conf.set('HAVE_TIME_H', cc.has_header('time.h'))
+conf.set('HAVE_UNISTD_H', cc.has_header('unistd.h'))
+conf.set('HAVE_UTIME_H', cc.has_header('utime.h'))
+conf.set('HAVE_X509_H', cc.has_header('x509.h'))
+
+conf.set('HAVE_PROCESS_H', cc.has_header('process.h'))
+conf.set('HAVE_STDDEF_H', cc.has_header('stddef.h'))
+conf.set('HAVE_DLFCN_H', cc.has_header('dlfcn.h'))
+conf.set('HAVE_MALLOC_H', cc.has_header('malloc.h'))
+conf.set('HAVE_MEMORY_H', cc.has_header('memory.h'))
+conf.set('HAVE_NETINET_IF_ETHER_H', cc.has_header('netinet/if_ether.h'))
+conf.set('HAVE_SOCKIO_H', cc.has_header('sockio.h'))
+conf.set('HAVE_SYS_UTSNAME_H', cc.has_header('sys/utsname.h'))
+
 configure_file(output: 'paolone.h', configuration: conf)

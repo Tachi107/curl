@@ -36,3 +36,7 @@ option('use_libssh', type: 'boolean', value: false, description: 'Use libssh')
 option('use_gssapi', type: 'boolean', value: false, description: 'Use GSSAPI Kerberos implementation')
 
 option('enable_unix_sockets', type: 'boolean', value: true, description: 'Enable Unix domain sockets support')
+
+option('curl_ca_bundle', type: 'string', value: 'auto', description: 'Path to the CA bundle. Set "none" to disable, "auto" for auto-detection, or to a file path')
+option('curl_ca_fallback', type: 'boolean', value: false, description: 'Set to true to use built-in CA store of TLS backend')
+option('curl_ca_path', type: 'string', value: 'auto', description: 'Location of default CA path. Set "none" to disable, "auto" for auto-detection, or to a directory path.')
