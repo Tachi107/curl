@@ -404,8 +404,8 @@ conf.set('SIZEOF_SSIZE_T', cc.sizeof('ssize_t'))
 conf.set('SIZEOF_LONG', cc.sizeof('long'))
 conf.set('SIZEOF_LONG_LONG', cc.sizeof('long long'))
 conf.set('SIZEOF_INT', cc.sizeof('int'))
-conf.set('SIZEOF___INT64', cc.sizeof('__int64'))
+conf.set('SIZEOF___INT64', cc.sizeof('__int64')) # seems unused
 conf.set('SIZEOF_LONG_DOUBLE', cc.sizeof('long double'))
-conf.set('SIZEOF_TIME_T', cc.sizeof('time_t'))
+conf.set('SIZEOF_TIME_T', cc.sizeof('time_t', prefix: '#include <time.h>'))
 
 configure_file(output: 'paolone.h', configuration: conf)
