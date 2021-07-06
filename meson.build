@@ -19,6 +19,7 @@ project(
 #
 # TODO:
 #   I nomi delle opzioni sono inconsistenti
+#   Ordinare alfabeticamente i vari check cc.has_header(), cc.sizeof(), ecc
 
 conf = configuration_data()
 cc = meson.get_compiler('c')
@@ -397,5 +398,14 @@ conf.set('HAVE_MEMORY_H', cc.has_header('memory.h'))
 conf.set('HAVE_NETINET_IF_ETHER_H', cc.has_header('netinet/if_ether.h'))
 conf.set('HAVE_SOCKIO_H', cc.has_header('sockio.h'))
 conf.set('HAVE_SYS_UTSNAME_H', cc.has_header('sys/utsname.h'))
+
+conf.set('SIZEOF_SIZE_T', cc.sizeof('size_t'))
+conf.set('SIZEOF_SSIZE_T', cc.sizeof('ssize_t'))
+conf.set('SIZEOF_LONG', cc.sizeof('long'))
+conf.set('SIZEOF_LONG_LONG', cc.sizeof('long long'))
+conf.set('SIZEOF_INT', cc.sizeof('int'))
+conf.set('SIZEOF___INT64', cc.sizeof('__int64'))
+conf.set('SIZEOF_LONG_DOUBLE', cc.sizeof('long double'))
+conf.set('SIZEOF_TIME_T', cc.sizeof('time_t'))
 
 configure_file(output: 'paolone.h', configuration: conf)
