@@ -669,7 +669,7 @@ if test X"$want_hyper" != Xno; then
        AC_CHECK_HEADERS(hyper.h,
           experimental="$experimental Hyper"
           AC_MSG_NOTICE([Hyper support is experimental])
-          curl_h1_msg="enabled (Hyper)"
+          curl_h1_msg="enabled (Hyper"
           curl_h2_msg=$curl_h1_msg
           HYPER_ENABLED=1
           AC_DEFINE(USE_HYPER, 1, [if hyper is in use])
@@ -1310,7 +1310,7 @@ if test X"$OPT_BROTLI" != Xno; then
   AC_CHECK_LIB(brotlidec, BrotliDecoderDecompress)
 
   AC_CHECK_HEADERS(brotli/decode.h,
-    curl_brotli_msg="enabled (libbrotlidec)"
+    curl_brotli_msg="enabled (libbrotlidec"
     HAVE_BROTLI=1
     AC_DEFINE(HAVE_BROTLI, 1, [if BROTLI is in use])
     AC_SUBST(HAVE_BROTLI, [1])
@@ -1396,7 +1396,7 @@ if test X"$OPT_ZSTD" != Xno; then
   AC_CHECK_LIB(zstd, ZSTD_createDStream)
 
   AC_CHECK_HEADERS(zstd.h,
-    curl_zstd_msg="enabled (libzstd)"
+    curl_zstd_msg="enabled (libzstd"
     HAVE_ZSTD=1
     AC_DEFINE(HAVE_ZSTD, 1, [if libzstd is in use])
     AC_SUBST(HAVE_ZSTD, [1])
@@ -2020,7 +2020,7 @@ if test X"$OPT_LIBSSH2" != Xno; then
   AC_CHECK_LIB(ssh2, libssh2_session_block_directions)
 
   AC_CHECK_HEADERS(libssh2.h,
-    curl_ssh_msg="enabled (libSSH2)"
+    curl_ssh_msg="enabled (libSSH2"
     LIBSSH2_ENABLED=1
     AC_DEFINE(USE_LIBSSH2, 1, [if libSSH2 is in use])
     AC_SUBST(USE_LIBSSH2, [1])
@@ -2093,7 +2093,7 @@ elif test X"$OPT_LIBSSH" != Xno; then
   AC_CHECK_LIB(ssh, ssh_new)
 
   AC_CHECK_HEADERS(libssh/libssh.h,
-    curl_ssh_msg="enabled (libSSH)"
+    curl_ssh_msg="enabled (libSSH"
     LIBSSH_ENABLED=1
     AC_DEFINE(USE_LIBSSH, 1, [if libSSH is in use])
     AC_SUBST(USE_LIBSSH, [1])
@@ -2138,7 +2138,7 @@ elif test X"$OPT_WOLFSSH" != Xno; then
   AC_CHECK_LIB(wolfssh, wolfSSH_Init)
 
   AC_CHECK_HEADERS(wolfssh/ssh.h,
-    curl_ssh_msg="enabled (wolfSSH)"
+    curl_ssh_msg="enabled (wolfSSH"
     WOLFSSH_ENABLED=1
     AC_DEFINE(USE_WOLFSSH, 1, [if wolfSSH is in use])
     AC_SUBST(USE_WOLFSSH, [1])
@@ -2206,7 +2206,7 @@ if test X"$OPT_LIBRTMP" != Xno; then
   AC_CHECK_LIB(rtmp, RTMP_Init,
     [
      AC_CHECK_HEADERS(librtmp/rtmp.h,
-        curl_rtmp_msg="enabled (librtmp)"
+        curl_rtmp_msg="enabled (librtmp"
         LIBRTMP_ENABLED=1
         AC_DEFINE(USE_LIBRTMP, 1, [if librtmp is in use])
         AC_SUBST(USE_LIBRTMP, [1])
@@ -2547,7 +2547,7 @@ if test X"$want_h2" != Xno; then
     AC_CHECK_LIB(nghttp2, nghttp2_session_set_local_window_size,
       [
        AC_CHECK_HEADERS(nghttp2/nghttp2.h,
-          curl_h2_msg="enabled (nghttp2)"
+          curl_h2_msg="enabled (nghttp2"
           NGHTTP2_ENABLED=1
           AC_DEFINE(USE_NGHTTP2, 1, [if nghttp2 is in use])
           AC_SUBST(USE_NGHTTP2, [1])
@@ -2833,7 +2833,7 @@ if test X"$want_nghttp3" != Xno; then
     AC_CHECK_LIB(nghttp3, nghttp3_conn_client_new,
       [
        AC_CHECK_HEADERS(nghttp3/nghttp3.h,
-          curl_h3_msg="enabled (ngtcp2 + nghttp3)"
+          curl_h3_msg="enabled (ngtcp2 + nghttp3"
           NGHTTP3_ENABLED=1
           AC_DEFINE(USE_NGHTTP3, 1, [if nghttp3 is in use])
           AC_SUBST(USE_NGHTTP3, [1])
@@ -2925,7 +2925,7 @@ if test X"$want_quiche" != Xno; then
        AC_CHECK_HEADERS(quiche.h,
           experimental="$experimental HTTP3"
           AC_MSG_NOTICE([HTTP3 support is experimental])
-          curl_h3_msg="enabled (quiche)"
+          curl_h3_msg="enabled (quiche"
           QUICHE_ENABLED=1
           AC_DEFINE(USE_QUICHE, 1, [if quiche is in use])
           AC_SUBST(USE_QUICHE, [1])
@@ -3265,7 +3265,7 @@ case $host in
     ;;
 esac
 
-AC_CHECK_DECLS([getpwuid_r], [], [AC_DEFINE(HAVE_DECL_GETPWUID_R_MISSING, 1, "Set if getpwuid_r() declaration is missing")],
+AC_CHECK_DECLS([getpwuid_r], [], [AC_DEFINE(HAVE_DECL_GETPWUID_R_MISSING, 1, "Set if getpwuid_r declaration is missing")],
         [[#include <pwd.h>
           #include <sys/types.h>]])
 
@@ -3883,7 +3883,7 @@ if test "x$want_ech" != "xno"; then
   dnl so more exhaustive checking seems unnecessary for now
   if test "x$OPENSSL_ENABLED" = "x1"; then
     AC_CHECK_FUNCS(SSL_get_ech_status,
-      ECH_SUPPORT="ECH support available (OpenSSL with SSL_get_ech_status)"
+      ECH_SUPPORT="ECH support available (OpenSSL with SSL_get_ech_status"
       ECH_ENABLED=1)
 
   dnl add 'elif' chain here for additional implementations
